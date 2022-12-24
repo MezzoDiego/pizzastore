@@ -43,10 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				
 				.authorizeHttpRequests() 
-//				.antMatchers("/api/auth/login").permitAll()
+				.antMatchers("/api/auth/login").permitAll()
 				//tutti gli utenti autenticati possono richiedere le info
-				.antMatchers("/api/utente/userInfo").authenticated()
-				.antMatchers("/**").permitAll()
 				// .antMatchers("/anonymous*").anonymous()
 				.anyRequest().authenticated()
 				.and()
