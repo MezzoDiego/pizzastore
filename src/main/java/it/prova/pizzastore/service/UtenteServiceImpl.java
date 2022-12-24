@@ -68,12 +68,6 @@ public class UtenteServiceImpl implements UtenteService {
 	}
 
 	@Override
-	public List<Utente> findByExample(Utente example) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	@Transactional
 	public void changeUserAbilitation(Long utenteInstanceId) {
 		Utente utenteInstance = caricaSingoloUtente(utenteInstanceId);

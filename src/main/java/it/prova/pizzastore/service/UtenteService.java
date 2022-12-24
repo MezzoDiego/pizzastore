@@ -18,8 +18,6 @@ public interface UtenteService {
 
 	public void rimuovi(Long idToRemove);
 
-	public List<Utente> findByExample(Utente example);
-
 	public void changeUserAbilitation(Long utenteInstanceId);
 
 	public Utente findByUsername(String username);
