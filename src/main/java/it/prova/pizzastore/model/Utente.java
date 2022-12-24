@@ -1,6 +1,6 @@
 package it.prova.pizzastore.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,7 +33,7 @@ public class Utente {
 	@Column(name = "cognome")
 	private String cognome;
 	@Column(name = "dateCreated")
-	private Date dateCreated;
+	private LocalDate dateCreated;
 
 	// se non uso questa annotation viene gestito come un intero
 	@Enumerated(EnumType.STRING)
@@ -52,15 +52,15 @@ public class Utente {
 		this.password = password;
 	}
 
-	public Utente(String username, String password, String nome, String cognome, Date dateCreated) {
+	public Utente(String username, String password, String nome, String cognome, LocalDate dateCreated) {
 		this(username, password);
 		this.nome = nome;
 		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 	}
 
-	public Utente(Long id, String username, String password, String nome, String cognome,
-			Date dateCreated, StatoUtente stato) {
+	public Utente(Long id, String username, String password, String nome, String cognome, LocalDate dateCreated,
+			StatoUtente stato) {
 		this(username, password, nome, cognome, dateCreated);
 		this.id = id;
 		this.stato = stato;
@@ -114,11 +114,11 @@ public class Utente {
 		this.cognome = cognome;
 	}
 
-	public Date getDateCreated() {
+	public LocalDate getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(Date dateCreated) {
+	public void setDateCreated(LocalDate dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
@@ -145,6 +145,5 @@ public class Utente {
 	public boolean isDisabilitato() {
 		return this.stato != null && this.stato.equals(StatoUtente.DISABILITATO);
 	}
-
 
 }
