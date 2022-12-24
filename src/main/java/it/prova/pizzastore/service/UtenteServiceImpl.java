@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import it.prova.pizzastore.model.StatoUtente;
 import it.prova.pizzastore.model.Utente;
 import it.prova.pizzastore.repository.utente.UtenteRepository;
+import it.prova.pizzastore.web.api.exceptions.NotFoundException;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,7 +44,7 @@ public class UtenteServiceImpl implements UtenteService {
 		// deve aggiornare solo nome, cognome, username, ruoli
 		Utente utenteReloaded = repository.findById(utenteInstance.getId()).orElse(null);
 		if (utenteReloaded == null)
-			throw new RuntimeException("Elemento non trovato");
+			throw new NotFoundException("Elemento non trovato");
 		utenteReloaded.setNome(utenteInstance.getNome());
 		utenteReloaded.setCognome(utenteInstance.getCognome());
 		utenteReloaded.setUsername(utenteInstance.getUsername());
@@ -77,7 +78,7 @@ public class UtenteServiceImpl implements UtenteService {
 	public void changeUserAbilitation(Long utenteInstanceId) {
 		Utente utenteInstance = caricaSingoloUtente(utenteInstanceId);
 		if (utenteInstance == null)
-			throw new RuntimeException("Elemento non trovato.");
+			throw new NotFoundException("Elemento non trovato.");
 
 		if (utenteInstance.getStato() == null || utenteInstance.getStato().equals(StatoUtente.CREATO))
 			utenteInstance.setStato(StatoUtente.ATTIVO);
