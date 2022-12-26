@@ -8,51 +8,71 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.pizzastore.model.Pizza;
 import it.prova.pizzastore.repository.pizza.PizzaRepository;
+import it.prova.pizzastore.web.api.exceptions.NotFoundException;
 
 @Service
 @Transactional(readOnly = true)
-public class PizzaServiceImpl implements PizzaService{
+public class PizzaServiceImpl implements PizzaService {
 
 	@Autowired
 	private PizzaRepository repository;
 
 	@Override
 	public List<Pizza> listAllPizze() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<Pizza>) repository.findAll();
 	}
 
 	@Override
 	public Pizza caricaSingolaPizza(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findById(id).orElse(null);
 	}
 
 	@Override
 	@Transactional
 	public Pizza aggiorna(Pizza pizzaInstance) {
-		// TODO Auto-generated method stub
-		return null;
+		Pizza pizzaReloaded = repository.findById(pizzaInstance.getId()).orElse(null);
+		if (pizzaReloaded == null)
+			throw new NotFoundException("Elemento non trovato");
+
+		pizzaReloaded.setDescrizione(pizzaInstance.getDescrizione());
+		pizzaReloaded.setIngredienti(pizzaInstance.getIngredienti());
+		pizzaReloaded.setPrezzoBase(pizzaInstance.getPrezzoBase());
+
+		return repository.save(pizzaReloaded);
 	}
 
 	@Override
 	@Transactional
 	public Pizza inserisciNuova(Pizza pizzaInstance) {
-		// TODO Auto-generated method stub
-		return null;
+		pizzaInstance.setAttivo(true);
+		return repository.save(pizzaInstance);
 	}
 
 	@Override
 	@Transactional
 	public void rimuovi(Long idToRemove) {
-		// TODO Auto-generated method stub
-		
+		repository.deleteById(idToRemove);
+
 	}
 
 	@Override
 	public List<Pizza> findByExample(Pizza example) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findByExample(example);
 	}
-	
+
+	@Override
+	@Transactional
+	public void changeAbilitation(Long id) {
+		Pizza pizzaInstance = caricaSingolaPizza(id);
+		if (pizzaInstance == null)
+			throw new NotFoundException("Elemento non trovato.");
+
+		if (pizzaInstance.getAttivo()) {
+			pizzaInstance.setAttivo(false);
+		} else {
+			pizzaInstance.setAttivo(true);
+		}
+
+	}
+
 }

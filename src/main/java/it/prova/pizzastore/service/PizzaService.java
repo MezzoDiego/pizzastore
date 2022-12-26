@@ -18,4 +18,6 @@ public interface PizzaService {
 
 	public List<Pizza> findByExample(Pizza example);
 	
+	public void changeAbilitation(Long id);
+	
 }
