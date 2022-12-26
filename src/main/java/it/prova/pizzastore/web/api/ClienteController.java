@@ -51,15 +51,14 @@ public class ClienteController {
 
 		return ClienteDTO.buildClienteDTOFromModel(cliente);
 	}
-	
+
 	@GetMapping("changeAbilitation/{id}")
 	public void changeAbilitation(@PathVariable(value = "id", required = true) long id) {
 		clienteService.changeAbilitation(id);
 	}
-	
+
 	@PutMapping("/{id}")
-	public ClienteDTO update(@Valid @RequestBody ClienteDTO clienteInput,
-			@PathVariable(required = true) Long id) {
+	public ClienteDTO update(@Valid @RequestBody ClienteDTO clienteInput, @PathVariable(required = true) Long id) {
 		Cliente cliente = clienteService.caricaSingoloCliente(id);
 
 		if (cliente == null)
@@ -68,6 +67,11 @@ public class ClienteController {
 		clienteInput.setId(id);
 		Cliente clienteAggiornato = clienteService.aggiorna(clienteInput.buildClienteModel());
 		return ClienteDTO.buildClienteDTOFromModel(clienteAggiornato);
+	}
+
+	@PostMapping("/search")
+	public List<ClienteDTO> search(@RequestBody ClienteDTO example) {
+		return ClienteDTO.createClienteDTOListFromModelList(clienteService.findByExample(example.buildClienteModel()));
 	}
 
 }
