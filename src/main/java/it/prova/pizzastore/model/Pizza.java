@@ -27,6 +27,11 @@ public class Pizza {
 	public Pizza() {
 		super();
 	}
+	
+	public Pizza(Long id) {
+		super();
+		this.id = id;
+	}
 
 	public Pizza(Long id, String descrizione, String ingredienti, Integer prezzoBase, Boolean attivo) {
 		super();

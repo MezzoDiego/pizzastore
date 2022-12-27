@@ -18,4 +18,8 @@ public interface OrdineService {
 
 	public List<Ordine> findByExample(Ordine example);
 	
+	public Integer calcolaPrezzoOrdine(Long idOrdine);
+	
+	public void changeAbilitation(Long id);
+	
 }

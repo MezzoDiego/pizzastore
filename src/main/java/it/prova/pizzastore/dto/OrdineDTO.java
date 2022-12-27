@@ -1,15 +1,18 @@
 package it.prova.pizzastore.dto;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import it.prova.pizzastore.model.Ordine;
+import it.prova.pizzastore.model.Pizza;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrdineDTO {
@@ -17,15 +20,24 @@ public class OrdineDTO {
 	private Long id;
 
 	@NotNull(message = "{data.notnull}")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate data;
 
 	@NotBlank(message = "{codice.notblank}")
 	private String codice;
 
-	@NotNull(message = "{costototale.notnull}")
 	private Integer costoTotale;
 
 	private Boolean closed;
+	
+	@NotNull(message = "{pizze.notnull}")
+	private Long[] pizzaIds;
+
+	@NotNull(message = "{fattorino.notnull}")
+	private UtenteDTO fattorino;
+
+	@NotNull(message = "{cliente.notnull}")
+	private ClienteDTO cliente;
 
 	public OrdineDTO() {
 		super();
@@ -80,13 +92,60 @@ public class OrdineDTO {
 		this.closed = closed;
 	}
 
+	public Long[] getPizzaIds() {
+		return pizzaIds;
+	}
+
+	public void setPizzaIds(Long[] pizzaIds) {
+		this.pizzaIds = pizzaIds;
+	}
+
+	public UtenteDTO getFattorino() {
+		return fattorino;
+	}
+
+	public void setFattorino(UtenteDTO fattorino) {
+		this.fattorino = fattorino;
+	}
+
+	public ClienteDTO getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(ClienteDTO cliente) {
+		this.cliente = cliente;
+	}
+
 	public Ordine buildOrdineModel() {
-		return new Ordine(this.id, this.data, this.codice, this.costoTotale, this.closed);
+		Ordine result = new Ordine(this.id, this.data, this.codice, this.costoTotale, this.closed);
+		if (pizzaIds != null)
+			result.setPizze(Arrays.asList(pizzaIds).stream().map(id -> new Pizza(id)).collect(Collectors.toSet()));
+
+		if (this.fattorino != null)
+			result.setFattorino(this.fattorino.buildUtenteModel(false));
+
+		if (this.cliente != null)
+			result.setCliente(this.cliente.buildClienteModel());
+
+		return result;
 	}
 
 	public static OrdineDTO buildOrdineDTOFromModel(Ordine ordineModel) {
-		return new OrdineDTO(ordineModel.getId(), ordineModel.getData(), ordineModel.getCodice(),
+		OrdineDTO result = new OrdineDTO(ordineModel.getId(), ordineModel.getData(), ordineModel.getCodice(),
 				ordineModel.getCostoTotale(), ordineModel.getClosed());
+
+		if (!ordineModel.getPizze().isEmpty())
+			result.pizzaIds = ordineModel.getPizze().stream().map(p -> p.getId()).collect(Collectors.toList())
+					.toArray(new Long[] {});
+
+		if (!ordineModel.getFattorino().equals(null))
+			result.setFattorino(UtenteDTO.buildUtenteDTOFromModel(ordineModel.getFattorino()));
+
+		if (!ordineModel.getCliente().equals(null))
+			result.setCliente(ClienteDTO.buildClienteDTOFromModel(ordineModel.getCliente()));
+
+		return result;
+
 	}
 
 	public static List<OrdineDTO> createOrdineDTOListFromModelList(List<Ordine> modelListInput) {

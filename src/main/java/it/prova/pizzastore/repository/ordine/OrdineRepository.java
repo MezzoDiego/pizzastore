@@ -1,9 +1,11 @@
 package it.prova.pizzastore.repository.ordine;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import it.prova.pizzastore.model.Ordine;
 
 public interface OrdineRepository extends CrudRepository<Ordine, Long>, CustomOrdineRepository {
-
+	@Query(value= "select sum(p.prezzoBase) from Pizza p join ordine_pizza op on p.id=op.pizza_id where ordine_id = ?1", nativeQuery = true)
+	Integer calcolaSommaPrezzi(Long id);
 }
