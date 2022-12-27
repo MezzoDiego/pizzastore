@@ -32,4 +32,6 @@ public interface OrdineService {
 	
 	public List<Cliente> clientiVirtuosiBetween(LocalDate dataInizio, LocalDate dataFine);
 	
+	public List<Ordine> ordiniPerFattorino(String username);
+	
 }
