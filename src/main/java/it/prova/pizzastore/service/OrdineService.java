@@ -11,6 +11,8 @@ public interface OrdineService {
 	public List<Ordine> listAllOrdini();
 
 	public Ordine caricaSingoloOrdine(Long id);
+	
+	public Ordine caricaSingoloOrdineConPizze(Long id);
 
 	public Ordine aggiorna(Ordine ordineInstance);
 

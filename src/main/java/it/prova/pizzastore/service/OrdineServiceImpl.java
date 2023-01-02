@@ -122,4 +122,9 @@ public class OrdineServiceImpl implements OrdineService {
 		return repository.findAllOrdiniApertiPerFattorino(fattorino.getId());
 	}
 
+	@Override
+	public Ordine caricaSingoloOrdineConPizze(Long id) {
+		return repository.findByIdEagerPizze(id).orElse(null);
+	}
+
 }

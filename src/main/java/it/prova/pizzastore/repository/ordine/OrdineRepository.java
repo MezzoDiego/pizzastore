@@ -2,6 +2,7 @@ package it.prova.pizzastore.repository.ordine;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -26,5 +27,8 @@ public interface OrdineRepository extends CrudRepository<Ordine, Long>, CustomOr
 	
 	@Query("from Ordine o join o.fattorino f where o.closed = false and f.id =?1")
 	List<Ordine> findAllOrdiniApertiPerFattorino(Long idFattorino);
+	
+	@Query("from Ordine o join fetch o.pizze p where o.id = ?1")
+	Optional<Ordine> findByIdEagerPizze(Long id);
 
 }
